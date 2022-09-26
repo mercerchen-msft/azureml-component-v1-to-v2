@@ -1,0 +1,45 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+# Metadata
+name: example.component
+version: 0.1.0
+display_name: Example Component
+type: DistributedComponent
+description: This is an example component.
+tags: {author: mercerchen@microsoft.com}
+is_deterministic: true
+# Interface
+inputs:
+  example_input_1:
+    type: path
+    description: >
+      This is an example input.
+  example_input_2:
+    type: int
+    description: >
+      This is an example input.
+    optional: false
+  example_input_3:
+    type: float
+    description: >
+      This is an example input.
+    optional: true
+outputs:
+  example_output:
+    type: path
+    description: >
+      This is an example output.
+
+# Command & Environment
+launcher:
+  type: mpi
+  additional_arguments: >-
+    python register_model.py 
+    --example_input_1 {inputs.example_input_1}
+    --example_input_2 {inputs.example_input_2}
+    [--example_input_3 {inputs.example_input_3}]
+    --example_output {outputs.example_output}
+
+environment:
+  docker:
+    image: babeldockerimages.azurecr.io/ptca-babel:20220809.2
+  os: Linux
